@@ -8,7 +8,6 @@ import Link from "next/link";
 import { PostTypes } from "@/types/postTypes";
 
 const BlogCard: React.FC<{ post: PostTypes }> = ({ post }) => {
-  console.log(post);
   return (
     <article className="relative rounded-md overflow-hidden">
       <div className="w-[1000px] h-[450px] relative">
@@ -18,7 +17,6 @@ const BlogCard: React.FC<{ post: PostTypes }> = ({ post }) => {
             layout="fill"
             objectFit="cover"
             alt={`image for ${post.title}`}
-            onError={(e) => console.error("Image failed to load", e)}
           />
         )}
         <Overlay />

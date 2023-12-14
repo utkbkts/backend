@@ -20,7 +20,7 @@ const LatestPost: React.FC<{ posts: PostTypes[] }> = ({
       (prevVisibleBlogs) => prevVisibleBlogs + 3
     );
   };
-
+  
   return (
     <section
     className="col-span-2"
@@ -31,7 +31,7 @@ const LatestPost: React.FC<{ posts: PostTypes[] }> = ({
         id="latest-post"
         className="text-center text-2xl font-extrabold uppercase text-tertiary inline-block px-2 mb-10"
       >
-        Latest Post
+           {posts.length <=0 ? "Not yet Posts":" Latest Post"}
       </h2>
     </div>
 

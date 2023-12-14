@@ -44,6 +44,9 @@ const Posts: React.FC<{ posts: PostTypes[] }> = ({
     setSeclectedCategory(category);
     setVisibleBlogs(5);
   };
+  if (posts?.length <= 0) {
+    return <h1 className=" text-3xl font-extrabold">Not yet Top Posts</h1>;
+  }
   return (
     <section className="col-span-2" aria-labelledby="posts">
     <div className="w-full text-center">
@@ -51,7 +54,7 @@ const Posts: React.FC<{ posts: PostTypes[] }> = ({
         id="posts"
         className="text-center text-2xl font-extrabold uppercase text-tertiary inline-block px-2 mb-10"
       >
-        All Post
+        {!posts ? "Not yet Posts":" Post"}
       </h2>
     </div>
 

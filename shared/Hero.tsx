@@ -10,6 +10,10 @@ const Hero: React.FC<{ posts: PostTypes[] }> = ({ posts }) => {
 
   const topFeatured = featuredPost.slice(0, 1);
   const bottomFeatured = featuredPost.slice(1, 4);
+
+  if (posts.length <= 0) {
+    return <h1 className="text-center text-3xl font-extrabold">Not yet Posts</h1>;
+  }
   return (
     <section className="relative">
     <div className="w-[95%] mx-auto max-w-[1450px] z-1">

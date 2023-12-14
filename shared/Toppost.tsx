@@ -26,6 +26,9 @@ const Toppost: React.FC<{ posts: PostTypes[] }> = ({ posts }) => {
         .slice(0, visibleBlogs);
     }
   };
+  if (posts?.length <= 0) {
+    return <h1 className=" text-3xl font-extrabold">Not yet Top Posts</h1>;
+  }
   return (
     <section aria-labelledby="top-post">
       <div className="w-full text-center">
@@ -33,7 +36,7 @@ const Toppost: React.FC<{ posts: PostTypes[] }> = ({ posts }) => {
           id="top-post"
           className="text-center text-2xl font-extrabold uppercase text-tertialy inline-block px-2 mb-10"
         >
-          Top Post
+         {!posts ? "Not yet Posts":" Top Post"}
         </h2>
       </div>
       <div className="flex h-full flex-col gap-12 items-center">
