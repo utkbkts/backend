@@ -32,47 +32,8 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  
 
-    const res = await fetch("/api/contact", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        Subject,
-        Phone,
-        Message,
-      }),
-    });
-
-    const responseBody = await res.text();
-    console.log("Response body:", responseBody);
-    try {
-      if (Phone.length < 11) {
-        toast.error("Number characters larger in 11");
-        return;
-      }
-      if (
-        name !== "" &&
-        email !== "" &&
-        Subject !== "" &&
-        Phone !== "" &&
-        Message !== ""
-      ) {
-        const parsedResponse = JSON.parse(responseBody);
-        const { msg } = parsedResponse;
-        toast.success("Message is send Successfuly:", msg);
-      } else {
-        toast.error("Every place must be filled");
-      }
-    } catch (error: any) {
-      toast.error("Error parsing JSON:", error);
-    }
-  };
   return (
     <div>
       <div className="relative h-[500px] w-full">
@@ -93,7 +54,7 @@ const Contact = () => {
           Let's Discuss
         </h1>
 
-        <form onSubmit={handleSubmit} className="flex flex-col w-full gap-5">
+        <form className="flex flex-col w-full gap-5">
           <div className="flex gap-5 max-sm:flex-col">
             <input
               type="text"

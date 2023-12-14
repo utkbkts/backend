@@ -1,15 +1,17 @@
-import { blogData } from "@/constants/blogData";
+"use client"
+import { PostTypes } from "@/types/postTypes";
+import { formatDate } from "@/utils/Formatdate";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useState } from "react";
 
-const Slider = () => {
+const Slider: React.FC<{ posts: PostTypes[] }> = ({ posts }) => {
   const itemsPerPage = 3;
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const totalSlides = Math.ceil(blogData.length / itemsPerPage);
+  const totalSlides = Math.ceil(posts.length / itemsPerPage);
   const start = currentIndex * itemsPerPage;
   const end = start + itemsPerPage;
-  const currentData = blogData.slice(start, end);
+  const currentData = posts.slice(start, end);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => Math.max(0, prevIndex - 1));
@@ -26,10 +28,10 @@ const Slider = () => {
           key={id}
           className="w-full h-full transition-transform ease-in-out duration-500"
         >
-          <img src={post.image_path} alt="" className="w-[500px] h-[200px]" />
+          <img src={post.img as string} alt="" className="w-[500px] h-[200px]" />
           <div className="flex items-center gap-2 ">
-            <span className="md:text-xl text-sm">{post.authorName}</span>
-            <span>{post.publishDate}</span>
+            <span className="md:text-xl text-sm">{post.user.name}</span>
+            <span> {formatDate(post.createdAt.toString())}</span>
           </div>
         </div>
       ))}
@@ -49,7 +51,7 @@ const Slider = () => {
           </button>
         </span>
         <span
-          className={`absolute right-0 bg-zinc-300 hover:w-[50px] hover:bg-red-400 transition-all duration-500 ${
+          className={`absolute right-0 ease-in bg-zinc-300 hover:w-[50px] hover:bg-red-400 transition-all duration-500 ${
             currentIndex === totalSlides - 1 ? "opacity-50" : null
           }`}
           onClick={handleNext}

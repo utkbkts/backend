@@ -2,33 +2,33 @@ import Tag from "@/ui/Tag";
 import { Facebook, Github, Twitter } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import { PostTypes } from "@/types/postTypes";
+import { formatDate } from "@/utils/Formatdate";
 
-interface searchParamsTypes {
-  id: string;
-  title: string;
-  image_path: string;
-  paragraph: string;
-  featured: boolean;
-  topPost: boolean;
-  tags: string[];
-  authorImage: string;
-  authorName: string;
-  publishDate: string;
-}
+const getData = async (id: string) => {
+  const res = await fetch(`http://localhost:3000/api/post/${id}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error("Failed");
+  }
+  return res.json();
+};
 
-const Search = ({ searchParams }: { searchParams: searchParamsTypes }) => {
-  const post = searchParams;
+const Search = async ({ params }: { params: PostTypes }) => {
+  const { id } = params;
+  const post = await getData(id);
   return (
     <div className="w-[95%] mx-auto max-w-[1450px]">
       <div className="w-full h-[400px] relative mb-5">
         <Image
           fill
           alt="image"
-          src={post.image_path}
+          src={post.img}
           className="object-cover"
         />
       </div>
-      <Tag text={post.tags} />
+      <Tag text={post.category} />
       <h2 className="text-4xl text-tertialy my-3 uppercase font-extrabold">
         {post.title}
       </h2>
@@ -45,21 +45,19 @@ const Search = ({ searchParams }: { searchParams: searchParamsTypes }) => {
         </aside>
         <article>
           <p className="text-xl">
-            {post.paragraph}
-            {post.paragraph}
-            {post.paragraph}
+            {post.description}
           </p>
           <div className="mt-4 flex items-center gap-2">
             <Image
-              src={post.authorImage}
+              src={post.user.image}
               alt="image"
               width={20}
               height={20}
               className="object-cover w-12 h-12 rounded-full"
             />
             <div className="flex flex-col">
-              <span>{post.authorName}</span>
-              <span className="italic text-tertialy">{post.publishDate}</span>
+              <span>{post.user.name}</span>
+              <span className="italic text-tertialy">{formatDate(post.createdAt.toString())}</span>
             </div>
           </div>
         </article>

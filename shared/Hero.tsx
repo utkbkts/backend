@@ -1,64 +1,92 @@
-import { blogData } from "@/constants/blogData";
 import Overlay from "@/ui/Overlay";
 import Tag from "@/ui/Tag";
 import Link from "next/link";
 import React from "react";
+import { PostTypes } from "@/types/postTypes";
+import { formatDate } from "@/utils/Formatdate";
+import Image from "next/image";
+const Hero: React.FC<{ posts: PostTypes[] }> = ({ posts }) => {
+  const featuredPost = posts.filter((post) => post.featured === true);
 
-const Hero = () => {
-  const featuredPost = blogData.filter((blog) => blog.featured === true);
-
-  const topFeaturedPost = featuredPost.slice(0, 1);
-  const bottomPost = featuredPost.slice(1, 4);
+  const topFeatured = featuredPost.slice(0, 1);
+  const bottomFeatured = featuredPost.slice(1, 4);
   return (
+    <section className="relative">
     <div className="w-[95%] mx-auto max-w-[1450px] z-1">
-      {topFeaturedPost.map((post, id: any) => (
+      {topFeatured.map((post) => (
         <article
-          key={id}
+          key={post.id}
           className="flex flex-col gap-5 mb-5 text-center relative"
         >
-          <Tag text={post.tags} />
-          <h2 className="text-6xl font-extrabold uppercase text-tertialy">
+          <Tag text={post.category} />
+
+          <h2 className="text-6xl font-extrabold uppercase text-tertiary">
             {post.title}
           </h2>
-          <div className="flex items-center gap-3 font-light text-tertialy justify-center">
-            <div className="w-10 h-10 rounded-full bg-black"></div>
-            <span>{post.authorName}</span>
-            <span className="italic">{post.publishDate}</span>
+          <div className="flex items-center gap-3 font-light text-tertiary justify-center">
+            {post.user.image && (
+              <Image
+                src={post.user.image}
+                height={50}
+                width={50}
+                alt={`Image of ${post.user.name}`}
+                className="rounded-full drop-shadow-lg"
+              />
+            )}
+            <span>{post.user.name}</span>
+            <span className=" italic">
+              {formatDate(post.createdAt.toString())}
+            </span>
           </div>
-          <div className="overflow-hidden relative max-h-[600px] shadow-xl">
-            <img
-              src={post.image_path}
-              alt={`image for ${post.title}`}
-              className="object-cover w-full h-full"
-            />
-          </div>
-        </article>
-      ))}
-      <div className="grid grid-cols-3 gap-8 max-lg:grid-cols-1">
-        {bottomPost.map((post, id) => (
-          <article className="flex items-center flex-col gap-3 text-center">
-              <Link className="w-full" href={{ pathname: `blog/${post.id}`, query: { ...post } }}>
-
-            <div className="relative overflow-hidden h-72 w-full shadow-xl">
+          <Link href={`/blog/${post.id}`}>
+            <div className="relative max-h-[600px] overflow-hidden shadow-xl">
+              {post.img && (
                 <img
-                  src={post.image_path}
-                  alt="image"
+                  src={post.img}
+                  alt={`image for ${post.title}`}
                   className="object-cover w-full h-full"
                 />
+              )}
               <Overlay />
             </div>
+          </Link>
+        </article>
+      ))}
+
+      <div className="grid grid-cols-3 gap-8 max-lg:grid-cols-1">
+        {bottomFeatured.map((post) => (
+          <article
+            key={post.id}
+            className="flex flex-col gap-3 items-center text-center relative"
+          >
+            <Link
+              className="w-full"
+              href={`/blog/${post.id}`}
+            >
+              <div className="relative  overflow-hidden h-72 shadow-xl w-full">
+                {post.img && (
+                  <img
+                    src={post.img}
+                    alt={`image for ${post.title}`}
+                    className="object-cover w-full h-full"
+                  />
+                )}
+                <Overlay />
+              </div>
             </Link>
 
-            <Tag text={post.tags} />
-            <h3 className="text-xl font-extrabold uppercase text-tertialy px-5">
+            <Tag text={post.category} />
+            <h3 className="text-1xl font-extrabold uppercase text-tertiary px-5">
               {post.title}
             </h3>
-            <span className="text-zinc-400">{post.authorName}</span>
-            <span className="italic">{post.publishDate}</span>
+            <span className="font-light italic">
+              {formatDate(post.createdAt.toString())}
+            </span>
           </article>
         ))}
       </div>
     </div>
+  </section>
   );
 };
 

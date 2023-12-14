@@ -1,13 +1,34 @@
-"use client"
+"use client";
 import Button from "@/ui/Button";
-import React from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import {signIn, useSession} from "next-auth/react"
 const Login = () => {
-  const {data:session}=useSession()
+  const [IsLoading, setIsLoading] = useState(false);
+  const session = useSession();
+  const router = useRouter();
 
-  console.log(session);
-  
+  useEffect(() => {
+    if (session?.status === "authenticated") {
+      router.push("/");
+    }
+  }, [session?.status, router]);
+
+  const socialAction = (action: string) => {
+    setIsLoading(true);
+    signIn(action, { redirect: false })
+      .then((callback) => {
+        if (callback?.error) {
+          return;
+        }
+        if (callback?.ok) {
+          router.push("/");
+        }
+      })
+      .finally(() => setIsLoading(false));
+  };
+
   return (
     <div className="flex items-center justify-center w-full h-full flex-col">
       <div className=" border-b border-b-gray-500 w-full text-center ">
@@ -48,7 +69,10 @@ const Login = () => {
             <span className="absolute right-0 top-1/2 w-[150px] h-[1px] border-black border"></span>
           </div>
           <div className="flex items-center justify-center w-full mt-4">
-            <button onClick={()=>signIn()} className="bg-slate-100 py-2 px-6 flex items-center gap-2 rounded-md">
+            <button
+              onClick={() => socialAction("google")}
+              className="bg-slate-100 py-2 px-6 flex items-center gap-2 rounded-md"
+            >
               <FcGoogle className="text-4xl" />
               in with Login
             </button>

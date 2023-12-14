@@ -15,8 +15,4 @@ export const navLinks = [
       route: "/contact",
       label: "Contact",
     },
-    {
-      route: "/create",
-      label: "Create",
-    },
   ];
